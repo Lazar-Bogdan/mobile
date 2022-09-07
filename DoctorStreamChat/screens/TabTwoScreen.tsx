@@ -1,34 +1,39 @@
 import React, { Component } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 
-export default class Profile extends Component {
 
-  render() {
-    return (
-      <View style={styles.container}>
-          <View style={styles.header}></View>
-          <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
-          <View style={styles.body}>
-            <View style={styles.bodyContent}>
-              <Text style={styles.title}>Chat</Text>
 
-              <TouchableOpacity style={styles.buttonContainer}>
-                <Text>Edit Profile</Text>  
-              </TouchableOpacity>              
-              <TouchableOpacity style={styles.buttonContainer}>
-                <Text>Add information</Text> 
-              </TouchableOpacity>
-            </View>
-        </View>
-      </View>
-    );
+const TwoPage = () => {
+  
+  function onPress(){
+    // send like a notif Alert.alert('test');
   }
+  return (
+    <View style={styles.container}>
+        <View style={styles.header}></View>
+        <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+        <View style={styles.body}>
+          <View style={styles.bodyContent}>
+            <Text style={styles.title}>Chat</Text>
+
+            <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
+              <Text>Edit Profile</Text>  
+            </TouchableOpacity>              
+            <TouchableOpacity style={styles.buttonContainer}>
+              <Text>Add information</Text> 
+            </TouchableOpacity>
+          </View>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -90,3 +95,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+export default TwoPage;
