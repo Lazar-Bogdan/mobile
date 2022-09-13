@@ -11,10 +11,13 @@ import {
 
 
 
-const TwoPage = () => {
+const TwoPage = ({navigation}) => {
   
   function onPress(){
-    // send like a notif Alert.alert('test');
+    navigation.navigate('EditProfile');
+  }
+  function onPressAddInfo(){
+    navigation.navigate('Info');
   }
   return (
     <View style={styles.container}>
@@ -27,7 +30,7 @@ const TwoPage = () => {
             <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
               <Text>Edit Profile</Text>  
             </TouchableOpacity>              
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity onPress={onPressAddInfo} style={styles.buttonContainer}>
               <Text>Add information</Text> 
             </TouchableOpacity>
           </View>
