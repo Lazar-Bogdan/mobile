@@ -1,7 +1,9 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text } from "react-native";
+import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, Button } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 
-const EditProfile = ({navigation}) => {
+
+export default function EditProfile ({navigation}) {
   const [username, onChangeUsername] = React.useState("");
   const [email, onChangeemail] = React.useState("");
 
@@ -12,6 +14,12 @@ const EditProfile = ({navigation}) => {
   function onComplete() {
 
   }
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
   return (
     <SafeAreaView>
         <TextInput
@@ -25,6 +33,7 @@ const EditProfile = ({navigation}) => {
             placeholder="Email"
             type="email"
         />
+        <Button title={'Gallery'} onPress={pickImage} />
         <TouchableOpacity onPress={onCancel} style={styles.buttonContainer}>
             <Text>Cancel</Text>  
         </TouchableOpacity>              
@@ -54,5 +63,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#00BFFF",
   },
 });
-
-export default EditProfile;

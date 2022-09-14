@@ -9,6 +9,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -20,6 +21,7 @@ import addInformation from '../screens/addInformation';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import Login from '../screens/login';
+import EditProfile from '../screens/editProfile';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -44,6 +46,7 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="Info" component={addInformation} options={{title: 'Information' }} />
+      <Stack.Screen name="EditProfile" component={EditProfile} options={{title: 'Information' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -59,6 +62,30 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+
+  async function getStorage(){
+    try{
+      const email = await AsyncStorage.getItem('email');
+      console.log('test + ');
+      console.log(email);
+      const response = await fetch(
+        'http://localhost:2000/users/getUserUnderEmail',{headers:{email:email}}
+      );
+      console.log(response);
+      let json = await response.json();
+      console.log(json);
+      if(response){
+        await AsyncStorage.setItem('_id',json._id);
+      }
+
+    }catch(err){
+
+    }
+  }
+
+  React.useEffect(()=>{
+    
+  },[getStorage()]);
 
   return (
     <BottomTab.Navigator

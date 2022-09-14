@@ -1,5 +1,6 @@
 import React,{useEffect} from "react";
 import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 const Login = ({navigation}) => {
@@ -24,6 +25,7 @@ const Login = ({navigation}) => {
         });
       console.log(response);
       if(response.ok == true){
+        await AsyncStorage.setItem('email',email);
         navigation.navigate('Root');
       }
     } catch (error) {
