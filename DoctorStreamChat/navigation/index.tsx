@@ -75,16 +75,16 @@ function BottomTabNavigator() {
       let json = await response.json();
       console.log(json);
       if(response){
-        await AsyncStorage.setItem('_id',json._id);
+        await AsyncStorage.setItem('id',json[0]._id);
       }
 
     }catch(err){
 
     }
   }
-
   React.useEffect(()=>{
-    
+    console.log('id : ');
+    console.log(AsyncStorage.getItem('id'));
   },[getStorage()]);
 
   return (

@@ -11,28 +11,72 @@ import {
   TextInput
 } from 'react-native';
 
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
+
 
 export default function AddInformation({ navigation }: RootTabScreenProps<'TabOne'>) {
     function onCancel() {
       navigation.navigate('Root');
     }
 
-    function onComplete() {
+    const [height,setHeight] = React.useState("");
+    const [widht, setWidth] = React.useState("");
+    const [pulse, setPulse] = React.useState("");
 
+    async function onComplete() {
+      if(height === "" || widht === "" || pulse === ""){
+        alert("Please complete all fields!");
+      }else{
+        const id = await AsyncStorage.getItem('id')
+        const response = await fetch(
+            'http://localhost:2000/users/addInfoFromMobile',{
+                method: 'PUT',
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    height:height,
+                    width:widht,
+                    pulse:pulse,
+                    _id:id
+                })
+        });
+        if(response){
+          alert(
+            "Information added"
+          );
+          navigation.navigate('Root');
+        }else{
+          alert(
+            "Information could not be added correctly. Please try again."
+          );
+        }
+      }
     }
     return (
       <SafeAreaView>
           <TextInput
               style={styles.input}
+              onChangeText={setHeight}
+              placeholder="Height"
           />
           <TextInput
               style={styles.input}
+              onChangeText={setWidth}
+              placeholder="Width"
+          />
+          <TextInput
+              style={styles.input}
+              onChangeText={setPulse}
+              placeholder="Pulse"
           />
           <TouchableOpacity onPress={onCancel} style={styles.buttonContainer}>
               <Text>Cancel</Text>  
           </TouchableOpacity>              
           <TouchableOpacity onPress={onComplete} style={styles.buttonContainer}>
-              <Text>Complete</Text> 
+              <Text>Add information</Text> 
           </TouchableOpacity>
       </SafeAreaView>
     );
