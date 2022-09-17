@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text } from "rea
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
-const Login = ({navigation}) => {
+const DoctorLogin = ({navigation}) => {
   const [email, onChangeemail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
 
@@ -14,7 +14,7 @@ const Login = ({navigation}) => {
     }else{
       try {
           const response = await fetch(
-              'http://localhost:2000/auth/login',{
+              'http://localhost:2000/auth/doctorLogin',{
                   method: 'POST',
                   headers: {
                   Accept: 'application/json',
@@ -27,7 +27,7 @@ const Login = ({navigation}) => {
           });
         if(response.ok == true){
           await AsyncStorage.setItem('email',email);
-          navigation.navigate('Root');
+          navigation.navigate('DoctorMessage');
         }
       } catch (error) {
         alert("Some error occoured, please try again.");
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default DoctorLogin;

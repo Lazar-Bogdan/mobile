@@ -22,6 +22,11 @@ import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../typ
 import LinkingConfiguration from './LinkingConfiguration';
 import Login from '../screens/login';
 import EditProfile from '../screens/editProfile';
+import DoctorMessage from '../screens/DoctorMessageTab';
+import DoctorEditProfile from '../screens/DoctorEditProfile';
+import DoctorProfileTab from '../screens/DoctorProfileTab';
+import FirstPage from '../screens/FirstPage';
+import DoctorLogin from '../screens/DoctorLogin';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -42,11 +47,16 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="FirstPage" component={FirstPage} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="doctorLogin" component={DoctorLogin} options={{ headerShown: false }} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="Info" component={addInformation} options={{title: 'Information' }} />
       <Stack.Screen name="EditProfile" component={EditProfile} options={{title: 'Information' }} />
+      <Stack.Screen name="DoctorMessage" component={DoctorMessage} options={{title:'Messages'}} />
+      <Stack.Screen name="DoctorProfile" component={DoctorProfileTab} options={{title:'Profile'}} />
+      <Stack.Screen name="DoctorEdit" component={DoctorEditProfile} options={{title:'Edit Profile'}} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -66,14 +76,10 @@ function BottomTabNavigator() {
   async function getStorage(){
     try{
       const email = await AsyncStorage.getItem('email');
-      console.log('test + ');
-      console.log(email);
       const response = await fetch(
         'http://localhost:2000/users/getUserUnderEmail',{headers:{email:email}}
       );
-      console.log(response);
       let json = await response.json();
-      console.log(json);
       if(response){
         await AsyncStorage.setItem('id',json[0]._id);
       }
@@ -83,8 +89,8 @@ function BottomTabNavigator() {
     }
   }
   React.useEffect(()=>{
-    console.log('id : ');
-    console.log(AsyncStorage.getItem('id'));
+    // console.log('id : ');
+    // console.log(AsyncStorage.getItem('id'));
   },[getStorage()]);
 
   return (

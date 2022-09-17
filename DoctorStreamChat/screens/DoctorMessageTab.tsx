@@ -5,7 +5,7 @@ import { RootTabScreenProps } from '../types';
 import {StyleSheet, Button, SafeAreaView} from "react-native";
 import axios from "axios";
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne'>) {
 
   const [channels, setChannels] = React.useState([{subscription:""}]);
   const [doctors, setDoctors] = React.useState([]);
@@ -14,7 +14,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   async function getSubFromDatabase(){
     const response = await fetch(
-        'http://localhost:2000/messages/clientMessage',{headers: { client: "bogdilazar5@gmail.com",}}
+        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: "bogdilazar5@gmail.com",}}
     );
     //let json = await response.text()
     let json = await response.json();
@@ -23,7 +23,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
       for(var i=0; i<json.length; i++){
         // console.log(json);
         // console.log(json[i].doctor);
-        const res = await fetch('http://localhost:2000/doctor/getDoctorUnderEmail', {headers: {email: json[i].doctor}});
+        const res = await fetch('http://localhost:2000/users/getUserUnderEmail', {headers: {email: json[i].client}});
         if(res){
           let json2 = await res.json();
           console.log(json2);
