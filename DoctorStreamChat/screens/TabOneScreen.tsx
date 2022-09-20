@@ -26,11 +26,11 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
         const res = await fetch('http://localhost:2000/doctor/getDoctorUnderEmail', {headers: {email: json[i].doctor}});
         if(res){
           let json2 = await res.json();
-          console.log(json2);
-          setDoctorsDetails([... doctorsDetails, json2]);
+          // console.log(json2);
+          setDoctorsDetails(doctorsDetails => [...doctorsDetails, json2]);
         }
       }
-      console.log(doctorsDetails.length);
+      //console.log(doctorsDetails.length);
     }
   }
 

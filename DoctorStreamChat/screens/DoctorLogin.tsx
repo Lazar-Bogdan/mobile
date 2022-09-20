@@ -27,7 +27,7 @@ const DoctorLogin = ({navigation}) => {
           });
         if(response.ok == true){
           await AsyncStorage.setItem('email',email);
-          navigation.navigate('DoctorMessage');
+          navigation.navigate('DoctorIndex');
         }
       } catch (error) {
         alert("Some error occoured, please try again.");

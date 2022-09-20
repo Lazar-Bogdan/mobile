@@ -2,8 +2,9 @@ import React, {useEffect} from "react";
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import {StyleSheet, Button, SafeAreaView} from "react-native";
-import axios from "axios";
+import {StyleSheet, Button, SafeAreaView, TouchableOpacity, Text} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
 
 export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne'>) {
 
@@ -14,23 +15,23 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
 
   async function getSubFromDatabase(){
     const response = await fetch(
-        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: "bogdilazar5@gmail.com",}}
+        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: "Bogdan@gmail.com",}}
     );
     //let json = await response.text()
     let json = await response.json();
+    // console.log(json);
     if(response){
-      // console.log(json.length);
+      // console.log(json[1].client);
+      // console.log(json[0].client);
       for(var i=0; i<json.length; i++){
         // console.log(json);
         // console.log(json[i].doctor);
         const res = await fetch('http://localhost:2000/users/getUserUnderEmail', {headers: {email: json[i].client}});
         if(res){
           let json2 = await res.json();
-          console.log(json2);
-          setDoctorsDetails([... doctorsDetails, json2]);
+          setDoctorsDetails(doctorsDetails => [...doctorsDetails, json2]);
         }
       }
-      console.log(doctorsDetails.length);
     }
   }
 
@@ -51,11 +52,19 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
   //   }
   // }
 
+  async function gotToMessage(id){
+    await AsyncStorage.setItem('id',id);
+    
+  }
 
   function mapChannels(List){
     if(!List){List=[];}
+    // console.log("list lenght");
+    // console.log(List.length);
     const Filtered = List.slice(0, visible).map((item) =>
-      <Button title={"test"}  />
+      <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0]._id)}}>
+          <Text>{item[0].username}</Text> 
+      </TouchableOpacity>
     );
     return Filtered;
   }
@@ -86,5 +95,16 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  buttonContainer: {
+    marginTop:10,
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:250,
+    borderRadius:30,
+    backgroundColor: "#00BFFF",
   },
 });

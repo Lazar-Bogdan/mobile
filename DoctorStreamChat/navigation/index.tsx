@@ -27,6 +27,7 @@ import DoctorEditProfile from '../screens/DoctorEditProfile';
 import DoctorProfileTab from '../screens/DoctorProfileTab';
 import FirstPage from '../screens/FirstPage';
 import DoctorLogin from '../screens/DoctorLogin';
+import Bottom from '../screens/DoctorIndex';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -48,8 +49,8 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="FirstPage" component={FirstPage} options={{ headerShown: false }} />
-      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-      <Stack.Screen name="doctorLogin" component={DoctorLogin} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} />
+      <Stack.Screen name="doctorLogin" component={DoctorLogin} options={{ headerShown: true }} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="Info" component={addInformation} options={{title: 'Information' }} />
@@ -57,6 +58,7 @@ function RootNavigator() {
       <Stack.Screen name="DoctorMessage" component={DoctorMessage} options={{title:'Messages'}} />
       <Stack.Screen name="DoctorProfile" component={DoctorProfileTab} options={{title:'Profile'}} />
       <Stack.Screen name="DoctorEdit" component={DoctorEditProfile} options={{title:'Edit Profile'}} />
+      <Stack.Screen name="DoctorIndex" component={Bottom} options={{headerShown: false}} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>

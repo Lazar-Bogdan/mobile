@@ -21,7 +21,7 @@ export default function DoctorEditProfile ({navigation}) {
     }else{
       const id = await AsyncStorage.getItem('id')
       const response = await fetch(
-          'http://localhost:2000/users/EditUserFromMobile',{
+          'http://localhost:2000/doctor/editDoctorPhone',{
               method: 'PUT',
               headers: {
               Accept: 'application/json',
@@ -37,7 +37,7 @@ export default function DoctorEditProfile ({navigation}) {
       });
       if(response){
         alert(
-          "Information added"
+          "Edit complete"
         );
         navigation.navigate('Root');
       }else{
@@ -74,10 +74,7 @@ export default function DoctorEditProfile ({navigation}) {
             onChangeText={setAge}
             placeholder="Age"
         />
-        <Button title={'Choose a photo'} onPress={pickImage}  />
-        <TouchableOpacity onPress={onCancel} style={styles.buttonContainer}>
-            <Text>Cancel</Text>  
-        </TouchableOpacity>              
+        <Button title={'Choose a photo'} onPress={pickImage}  />             
         <TouchableOpacity onPress={onComplete} style={styles.buttonContainer}>
             <Text>Complete</Text> 
         </TouchableOpacity>
