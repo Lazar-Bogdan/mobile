@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import {StyleSheet, Button, SafeAreaView} from "react-native";
+import {StyleSheet, Button, SafeAreaView, TouchableOpacity, Text} from "react-native";
 import axios from "axios";
 
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
@@ -55,7 +55,9 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   function mapChannels(List){
     if(!List){List=[];}
     const Filtered = List.slice(0, visible).map((item) =>
-      <Button title={"test"}  />
+      <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0]._id)}}>
+        <Text>{item[0].username}</Text> 
+      </TouchableOpacity>
     );
     return Filtered;
   }
@@ -86,5 +88,16 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  buttonContainer: {
+    marginTop:10,
+    height:45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:250,
+    borderRadius:30,
+    backgroundColor: "#00BFFF",
   },
 });
