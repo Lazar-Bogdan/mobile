@@ -14,7 +14,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   async function getSubFromDatabase(){
     const response = await fetch(
-        'http://localhost:2000/messages/clientMessage',{headers: { client: "bogdilazar5@gmail.com",}}
+        'http://localhost:2000/messages/clientMessage',{headers: { client: "Arianna@gmail.com",}}
     );
     //let json = await response.text()
     let json = await response.json();
@@ -51,9 +51,11 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   //   }
   // }
 
+  console.log(doctorsDetails);
 
   function mapChannels(List){
     if(!List){List=[];}
+    console.log(List.length);
     const Filtered = List.slice(0, visible).map((item) =>
       <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0]._id)}}>
         <Text>{item[0].username}</Text> 
