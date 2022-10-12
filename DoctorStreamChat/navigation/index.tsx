@@ -28,6 +28,7 @@ import DoctorProfileTab from '../screens/DoctorProfileTab';
 import FirstPage from '../screens/FirstPage';
 import DoctorLogin from '../screens/DoctorLogin';
 import Bottom from '../screens/DoctorIndex';
+import Chat from '../screens/chatRoom/chatroom';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -57,6 +58,7 @@ function RootNavigator() {
       <Stack.Screen name="EditProfile" component={EditProfile} options={{title: 'Information' }} />
       <Stack.Screen name="DoctorMessage" component={DoctorMessage} options={{title:'Messages'}} />
       <Stack.Screen name="DoctorProfile" component={DoctorProfileTab} options={{title:'Profile'}} />
+      <Stack.Screen name="Chat" component={Chat} options={{title:'Chat'}} />
       <Stack.Screen name="DoctorEdit" component={DoctorEditProfile} options={{title:'Edit Profile'}} />
       <Stack.Screen name="DoctorIndex" component={Bottom} options={{headerShown: false}} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>

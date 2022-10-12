@@ -12,6 +12,12 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   const [doctorsDetails, setDoctorsDetails] = React.useState([]);
   const[visible, setVisible] = React.useState(10);
 
+  function gotToMessage(id){
+    navigation.navigate('Chat');
+  }
+
+  console.log("tabOneScreen");
+
   async function getSubFromDatabase(){
     const response = await fetch(
         'http://localhost:2000/messages/clientMessage',{headers: { client: "Arianna@gmail.com",}}
