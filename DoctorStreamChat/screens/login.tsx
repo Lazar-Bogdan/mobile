@@ -14,6 +14,7 @@ const Login = ({navigation}) => {
     }else{
       try {
           const response = await fetch(
+            //https://backend-server-doctor.herokuapp.com/auth/login
               'http://localhost:2000/auth/login',{
                   method: 'POST',
                   headers: {
