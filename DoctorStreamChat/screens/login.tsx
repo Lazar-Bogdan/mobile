@@ -18,8 +18,8 @@ const Login = ({navigation}) => {
               'http://localhost:2000/auth/login',{
                   method: 'POST',
                   headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
+                      email: email,
+                      password: password
                   },
                   body: JSON.stringify({
                       email: email,
