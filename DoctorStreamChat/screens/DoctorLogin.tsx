@@ -12,18 +12,16 @@ const DoctorLogin = ({navigation}) => {
     if(email === "" || password === ""){
       alert("Please complete all fields!");
     }else{
+      console.log(email);
+      console.log(password);
       try {
           const response = await fetch(
               'http://localhost:2000/auth/doctorLogin',{
                   method: 'POST',
                   headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                      email: email,
-                      password: password
-                  })
+                    email: email,
+                    password: password
+                  }
           });
         if(response.ok == true){
           await AsyncStorage.setItem('email',email);

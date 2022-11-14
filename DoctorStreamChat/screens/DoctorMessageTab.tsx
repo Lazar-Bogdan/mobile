@@ -15,11 +15,11 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
 
   async function getSubFromDatabase(){
     const response = await fetch(
-        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: "Bogdan@gmail.com",}}
+        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: "Doctor@gmail.com",}}
     );
     //let json = await response.text()
     let json = await response.json();
-    // console.log(json);
+    //console.log(json);
     if(response){
       // console.log(json[1].client);
       // console.log(json[0].client);
@@ -53,8 +53,9 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
   // }
 
   async function gotToMessage(id){
+    console.log(id);
     await AsyncStorage.setItem('id',id);
-    
+    navigation.navigate('ChatDoctor');
   }
 
   function mapChannels(List){

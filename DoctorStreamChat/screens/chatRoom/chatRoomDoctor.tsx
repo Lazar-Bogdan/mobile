@@ -1,41 +1,40 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import io from 'socket.io-client';
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView } from "react-native";
+import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView} from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 const socket = io("http://127.0.0.1:3000");
 
-export default function Chat ({navigation}) {
+export default function ChatDoctor ({navigation}) {
     const [message, setMessage] = useState(" ");
     const [chatMessage, setChatMessage] = useState(["test"]);
-    const[visible, setVisible] = React.useState(50);
+    const[visible, setVisible] = React.useState(30);
     const [outputMessage, setOutputMessage] = useState([]);
-    const [socketMessage, setSocketMessage] = useState([""]);
+
     const [loadConversation, setConversation] = useState([]);
 
     async function loadMessages(){
-
         try{
-            const result = await fetch("http://localhost:2000/messages/getRoomMessage", {
+            const result = await fetch("http://localhost:2000/messages/getMessageDoctor", {
                 method: 'GET',
                 headers: {
                     roomid:"2"
                 }
             })
-            //console.log("loadingMessageClient");
+            console.log("loadingMessageClient");
             let json = await result.json();
-            //console.log(json[0].msg);
+            console.log(json[0].msg);
             setOutputMessage(json);
         }catch(error){
             console.log(error);
 
         }
-
     }
 
     useEffect(()=>{
         loadMessages();
-    },[setSocketMessage])
+        console.log("use effect called");
+    },[])
 
     async function submitChatMessage(){
         // socket.emit("chat message", message);
@@ -44,13 +43,12 @@ export default function Chat ({navigation}) {
         //     setMessage(chatMessage=> [...chatMessage, msg]);
         //     console.log(msg);
         // });
-
         try{
             const result = await fetch("http://localhost:2000/messages/addMessageConversation", {
                 method: 'POST',
                 headers: {
-                    from:"client",
-                    to:"doctor",
+                    from:"doctor",
+                    to:"client",
                     roomid:"2",
                     msg:message
                 }
@@ -58,9 +56,6 @@ export default function Chat ({navigation}) {
         }catch(error){
             console.log(error);
         }
-        
-        setSocketMessage(socketMessage => [...socketMessage, message]);
-        // loadMessages();
 
         const email = await AsyncStorage.getItem('email');
         socket.on("message", msg => {
@@ -68,7 +63,7 @@ export default function Chat ({navigation}) {
             setOutputMessage(msg);
             setMessage(" ");
             console.log(msg);
-            setSocketMessage(socketMessage => [...socketMessage, msg]);
+            
 
         });
 
@@ -90,25 +85,11 @@ export default function Chat ({navigation}) {
         );
         return Filtered;
       }
-
-    function mapChannelsSocket(List){
-        console.log("socketMap");
-        if(!List){List=[];}
-        console.log(List.length);
-        const Filtered = List.slice(0, visible).map((item) =>
-            <>
-                <Text>{item}</Text>
-            </> 
-        );
-        return Filtered;
-      }
     
     return (
-        
         <SafeAreaView>
             <ScrollView>
                 {mapChannels(outputMessage)}
-                {mapChannelsSocket(socketMessage)}
                 <TextInput 
                 style={{height: 40, borderWidth:2}}
                 value={message}
@@ -123,7 +104,6 @@ export default function Chat ({navigation}) {
                     <Text>Send</Text> 
                 </TouchableOpacity>
             </ScrollView>
-        
         </SafeAreaView>
       );
 };

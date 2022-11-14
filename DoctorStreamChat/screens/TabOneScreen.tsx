@@ -20,7 +20,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
 
   async function getSubFromDatabase(){
     const response = await fetch(
-        'http://localhost:2000/messages/clientMessage',{headers: { client: "Arianna@gmail.com",}}
+        'http://localhost:2000/messages/clientMessage',{headers: { client: "client@gmail.com",}}
     );
     //let json = await response.text()
     let json = await response.json();
@@ -36,7 +36,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           setDoctorsDetails(doctorsDetails => [...doctorsDetails, json2]);
         }
       }
-      //console.log(doctorsDetails.length);
+      // console.log(doctorsDetails.length);
     }
   }
 
