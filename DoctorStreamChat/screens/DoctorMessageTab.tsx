@@ -14,25 +14,27 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
   const[visible, setVisible] = React.useState(10);
 
   async function getSubFromDatabase(){
+    const email = await AsyncStorage.getItem('email')
     const response = await fetch(
-        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: "Doctor@gmail.com",}}
+        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: email,}}
     );
     //let json = await response.text()
     let json = await response.json();
-    //console.log(json);
-    if(response){
-      // console.log(json[1].client);
-      // console.log(json[0].client);
-      for(var i=0; i<json.length; i++){
-        // console.log(json);
-        // console.log(json[i].doctor);
-        const res = await fetch('http://localhost:2000/users/getUserUnderEmail', {headers: {email: json[i].client}});
-        if(res){
-          let json2 = await res.json();
-          setDoctorsDetails(doctorsDetails => [...doctorsDetails, json2]);
-        }
-      }
-    }
+    setDoctorsDetails(doctorsDetails => [...doctorsDetails, json]);
+
+    // //console.log(json);
+    // if(response){
+    //   // console.log(json[1].client);
+    //   // console.log(json[0].client);
+    //   for(var i=0; i<json.length; i++){
+    //     // console.log(json);
+    //     // console.log(json[i].doctor);
+    //     const res = await fetch('http://localhost:2000/users/getUserUnderEmail', {headers: {email: json[i].client}});
+    //     if(res){
+    //       let json2 = await res.json();
+    //     }
+    //   }
+    // }
   }
 
 
@@ -54,7 +56,7 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
 
   async function gotToMessage(id){
     console.log(id);
-    await AsyncStorage.setItem('id',id);
+    await AsyncStorage.setItem('roomid',id);
     navigation.navigate('ChatDoctor');
   }
 
@@ -63,8 +65,8 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
     // console.log("list lenght");
     // console.log(List.length);
     const Filtered = List.slice(0, visible).map((item) =>
-      <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0]._id)}}>
-          <Text>{item[0].username}</Text> 
+      <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0].roomid)}}>
+          <Text>{item[0].clientusername}</Text> 
       </TouchableOpacity>
     );
     return Filtered;

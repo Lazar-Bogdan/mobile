@@ -5,6 +5,8 @@ import { RootTabScreenProps } from '../types';
 import {StyleSheet, Button, SafeAreaView, TouchableOpacity, Text} from "react-native";
 import axios from "axios";
 
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
 export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
 
   const [channels, setChannels] = React.useState([{subscription:""}]);
@@ -12,32 +14,37 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   const [doctorsDetails, setDoctorsDetails] = React.useState([]);
   const[visible, setVisible] = React.useState(10);
 
-  function gotToMessage(id){
+  async function gotToMessage(id){
+    console.log("roomid");
+    console.log(id);
+    await AsyncStorage.setItem('roomid',id);
     navigation.navigate('Chat');
   }
 
   console.log("tabOneScreen");
 
   async function getSubFromDatabase(){
+    const email = await AsyncStorage.getItem('email')
     const response = await fetch(
-        'http://localhost:2000/messages/clientMessage',{headers: { client: "client@gmail.com",}}
+        'http://localhost:2000/messages/clientMessage',{headers: { client: email,}}
     );
     //let json = await response.text()
     let json = await response.json();
-    if(response){
-      // console.log(json.length);
-      for(var i=0; i<json.length; i++){
-        // console.log(json);
-        // console.log(json[i].doctor);
-        const res = await fetch('http://localhost:2000/doctor/getDoctorUnderEmail', {headers: {email: json[i].doctor}});
-        if(res){
-          let json2 = await res.json();
-          // console.log(json2);
-          setDoctorsDetails(doctorsDetails => [...doctorsDetails, json2]);
-        }
-      }
-      // console.log(doctorsDetails.length);
-    }
+    setDoctorsDetails(doctorsDetails => [...doctorsDetails, json]);
+    // if(response){
+    //   // console.log(json.length);
+    //   for(var i=0; i<json.length; i++){
+    //     // console.log(json);
+    //     // console.log(json[i].doctor);
+    //     const res = await fetch('http://localhost:2000/doctor/getDoctorUnderEmail', {headers: {email: json[i].doctor}});
+    //     if(res){
+    //       let json2 = await res.json();
+    //       // console.log(json2);
+    //       setDoctorsDetails(doctorsDetails => [...doctorsDetails, json2]);
+    //     }
+    //   }
+    //   // console.log(doctorsDetails.length);
+    // }
   }
 
 
@@ -63,8 +70,8 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
     if(!List){List=[];}
     console.log(List.length);
     const Filtered = List.slice(0, visible).map((item) =>
-      <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0]._id)}}>
-        <Text>{item[0].username}</Text> 
+      <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0].roomid)}}>
+        <Text>{item[0].doctorusername}</Text> 
       </TouchableOpacity>
     );
     return Filtered;
