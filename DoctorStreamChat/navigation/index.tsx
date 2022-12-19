@@ -51,17 +51,17 @@ function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="FirstPage" component={FirstPage} options={{ headerShown: false }} />
-      <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} />
-      <Stack.Screen name="doctorLogin" component={DoctorLogin} options={{ headerShown: true }} />
+      <Stack.Screen name="Login" component={Login} options={{ headerBackTitle:'Back', headerShown: true }} />
+      <Stack.Screen name="doctorLogin" component={DoctorLogin} options={{ headerBackTitle:'Back',title:'Login', headerShown: true }} />
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="Info" component={addInformation} options={{title: 'Information' }} />
-      <Stack.Screen name="EditProfile" component={EditProfile} options={{title: 'Information' }} />
+      <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerBackTitle:'Back', title: 'Information' }} />
       <Stack.Screen name="DoctorMessage" component={DoctorMessage} options={{title:'Messages'}} />
-      <Stack.Screen name="DoctorProfile" component={DoctorProfileTab} options={{title:'Profile'}} />
+      <Stack.Screen name="DoctorProfile" component={DoctorProfileTab} options={{headerBackTitle:'Back',title:'Profile'}} />
       <Stack.Screen name="Chat" component={Chat} options={{title:'Chat'}} />
       <Stack.Screen name="ChatDoctor" component={ChatDoctor} options={{title:'ChatDoctor'}} />
-      <Stack.Screen name="DoctorEdit" component={DoctorEditProfile} options={{title:'Edit Profile'}} />
+      <Stack.Screen name="DoctorEdit" component={DoctorEditProfile} options={{headerBackTitle:'Back', title:'Edit Profile'}} />
       <Stack.Screen name="DoctorIndex" component={Bottom} options={{headerShown: false}} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />

@@ -35,6 +35,7 @@ const DoctorLogin = ({navigation}) => {
 
   return (
     <SafeAreaView>
+        <Text style={styles.header}>Welcome back Dr.</Text>
         <TextInput
             style={styles.input}
             onChangeText={onChangeemail}
@@ -47,7 +48,7 @@ const DoctorLogin = ({navigation}) => {
             secureTextEntry={true}
         />             
         <TouchableOpacity onPress={()=>{getLogin()}} style={styles.buttonContainer}>
-            <Text>Login</Text> 
+            <Text style={{color:'white'}}>Login</Text> 
         </TouchableOpacity>
     </SafeAreaView>
   );
@@ -60,16 +61,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
+  header: {
+    marginTop:150,
+    left:110,
+    fontSize: 21,
+    color: 'black',
+    fontWeight: 'bold',
+    paddingVertical: 12,
+  },
   buttonContainer: {
-    marginTop:10,
+    display:"flex",
+    marginTop:20,
     height:45,
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom:20,
-    width:250,
+    width:150,
+    left:120,
     borderRadius:30,
-    backgroundColor: "#00BFFF",
+    backgroundColor: 'black',
+    flexDirection:"row"
+  },
+  background: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'white',
   },
 });
 
