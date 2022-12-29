@@ -56,15 +56,15 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="Info" component={addInformation} options={{title: 'Information' }} />
-      <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerBackTitle:'Back', title: 'Information' }} />
-      <Stack.Screen name="DoctorMessage" component={DoctorMessage} options={{title:'Messages'}} />
+      <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerBackTitle:'Back', title: 'Edit Profile' }} />
+      <Stack.Screen name="DoctorMessage" component={DoctorMessage} options={{headerBackTitle:'Back', title:'Messages'}} />
       <Stack.Screen name="DoctorProfile" component={DoctorProfileTab} options={{headerBackTitle:'Back',title:'Profile'}} />
-      <Stack.Screen name="Chat" component={Chat} options={{title:'Chat'}} />
-      <Stack.Screen name="ChatDoctor" component={ChatDoctor} options={{title:'ChatDoctor'}} />
+      <Stack.Screen name="Chat" component={Chat} options={{headerBackTitle:'Back', title:'Chat'}} />
+      <Stack.Screen name="ChatDoctor" component={ChatDoctor} options={{headerBackTitle:'Back', title:'ChatDoctor'}} />
       <Stack.Screen name="DoctorEdit" component={DoctorEditProfile} options={{headerBackTitle:'Back', title:'Edit Profile'}} />
       <Stack.Screen name="DoctorIndex" component={Bottom} options={{headerShown: false}} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="Modal" component={ModalScreen} options={{title:'Info'}}/>
       </Stack.Group>
     </Stack.Navigator>
   );

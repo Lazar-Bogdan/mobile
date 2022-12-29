@@ -6,7 +6,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Alert
+  Alert,
+  Pressable
 } from 'react-native';
 
 
@@ -27,12 +28,12 @@ const TwoPage = ({navigation}) => {
           <View style={styles.bodyContent}>
             <Text style={styles.title}>Chat</Text>
 
-            <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
-              <Text>Edit Profile</Text>  
-            </TouchableOpacity>              
-            <TouchableOpacity onPress={onPressAddInfo} style={styles.buttonContainer}>
-              <Text>Add information</Text> 
-            </TouchableOpacity>
+            <Pressable onPress={onPress} style={styles.buttonContainer1}>
+              <Text style={{color:'white'}}>Edit Profile</Text> 
+            </Pressable>              
+            <Pressable onPress={onPressAddInfo} style={styles.buttonContainer1}>
+              <Text style={{color:'white'}}>Add Information</Text> 
+            </Pressable>
           </View>
       </View>
     </View>
@@ -42,6 +43,18 @@ const TwoPage = ({navigation}) => {
 const styles = StyleSheet.create({
   container:{
 
+  },
+  buttonContainer1: {
+    display:"flex",
+    marginTop:20,
+    height:45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:150,
+    borderRadius:30,
+    backgroundColor: 'black',
+    flexDirection:"row"
   },
   header:{
     backgroundColor: "#00BFFF",

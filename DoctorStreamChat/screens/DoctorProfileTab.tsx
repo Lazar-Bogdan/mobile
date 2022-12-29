@@ -6,7 +6,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Alert
+  Alert,
+  Pressable
 } from 'react-native';
 
 
@@ -24,9 +25,9 @@ const DoctorProfileTab = ({navigation}) => {
           <View style={styles.bodyContent}>
             <Text style={styles.title}>Chat</Text>
 
-            <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
-              <Text>Edit Profile</Text>  
-            </TouchableOpacity>              
+            <Pressable onPress={onPress} style={styles.buttonContainer1}>
+              <Text style={{color:'white'}}>Edit Profile</Text> 
+            </Pressable>                
           </View>
       </View>
     </View>
@@ -86,6 +87,18 @@ const styles = StyleSheet.create({
     width:250,
     borderRadius:30,
     backgroundColor: "#00BFFF",
+  },
+  buttonContainer1: {
+    display:"flex",
+    marginTop:20,
+    height:45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:150,
+    borderRadius:30,
+    backgroundColor: 'black',
+    flexDirection:"row"
   },
   title: {
     fontSize: 20,

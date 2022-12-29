@@ -2,7 +2,9 @@ import React, {useEffect} from "react";
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
-import {StyleSheet, Button, SafeAreaView, TouchableOpacity, Text} from "react-native";
+import {StyleSheet, Button, SafeAreaView, TouchableOpacity, Pressable, Text} from "react-native";
+import axios from "axios";
+import {   Avatar, Card, Title, Paragraph } from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
@@ -20,7 +22,7 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
     );
     //let json = await response.text()
     let json = await response.json();
-    setDoctorsDetails(doctorsDetails => [...doctorsDetails, json]);
+    setDoctorsDetails(json);
 
     // //console.log(json);
     // if(response){
@@ -65,9 +67,29 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
     // console.log("list lenght");
     // console.log(List.length);
     const Filtered = List.slice(0, visible).map((item) =>
-      <TouchableOpacity style={styles.buttonContainer} onPress={()=>{gotToMessage(item[0].roomid)}}>
-          <Text>{item[0].clientusername}</Text> 
-      </TouchableOpacity>
+      <Card key={item._id} onPress={() => {
+            
+        }}>
+        <Card.Content>
+            <View style={{
+                flexDirection: 'row'
+            }}>
+                <Avatar.Image size={60} source={{ uri: item.img }} />
+                <View style={{ flex: 1 }}>
+                    <View style={{
+                        flexDirection: 'row', alignItems: 'center'
+                    }}>
+                        <View style={{ marginHorizontal: 10, flex: 1 }}>
+                            <Text style={{ fontSize: 16 }}>{item.clientusername}</Text>
+                        </View>
+                        <Pressable onPress={()=>{gotToMessage(item.roomid)}} style={styles.buttonContaine1r}>
+                            <Text style={{color:'white'}}>Join</Text> 
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+        </Card.Content>
+      </Card>
     );
     return Filtered;
   }
@@ -90,6 +112,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonContainer1: {
+    display:"flex",
+    marginTop:20,
+    height:45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:150,
+    borderRadius:30,
+    backgroundColor: 'black',
+    flexDirection:"row"
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -109,5 +143,17 @@ const styles = StyleSheet.create({
     width:250,
     borderRadius:30,
     backgroundColor: "#00BFFF",
+  },
+  buttonContaine1r: {
+    display:"flex",
+    marginTop:20,
+    height:45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:150,
+    borderRadius:30,
+    backgroundColor: 'black',
+    flexDirection:"row"
   },
 });

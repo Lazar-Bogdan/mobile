@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, Button } from "react-native";
+import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, Button, Pressable } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -57,7 +57,7 @@ export default function DoctorEditProfile ({navigation}) {
     console.log(result);
   }
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.safe}>
         <TextInput
             style={styles.input}
             onChangeText={onChangeUsername}
@@ -75,14 +75,17 @@ export default function DoctorEditProfile ({navigation}) {
             placeholder="Age"
         />
         <Button title={'Choose a photo'} onPress={pickImage}  />             
-        <TouchableOpacity onPress={onComplete} style={styles.buttonContainer}>
-            <Text>Complete</Text> 
-        </TouchableOpacity>
+        <Pressable onPress={onComplete} style={styles.buttonContainer1}>
+          <Text style={{color:'white'}}>Complete</Text> 
+        </Pressable>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safe: {
+    marginTop:100
+  },
   input: {
     height: 40,
     margin: 12,
@@ -99,5 +102,18 @@ const styles = StyleSheet.create({
     width:250,
     borderRadius:30,
     backgroundColor: "#00BFFF",
+  },
+  buttonContainer1: {
+    display:"flex",
+    marginTop:20,
+    height:45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:150,
+    borderRadius:30,
+    left:120,
+    backgroundColor: 'black',
+    flexDirection:"row"
   },
 });

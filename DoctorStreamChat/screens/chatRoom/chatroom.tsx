@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import io from 'socket.io-client';
 import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView } from "react-native";
+import { Button, IconButton, Avatar } from 'react-native-paper'
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { GiftedChat } from 'react-native-gifted-chat';
+
 //const socket = io("http://127.0.0.1:3000");
 
 export default function Chat ({navigation}) {
@@ -156,6 +159,7 @@ export default function Chat ({navigation}) {
             </ScrollView>
         
         </SafeAreaView>
+
       );
 };
 

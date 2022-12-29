@@ -8,7 +8,8 @@ import {
   Image,
   TouchableOpacity,
   Alert,
-  TextInput
+  TextInput,
+  Pressable
 } from 'react-native';
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -56,7 +57,7 @@ export default function AddInformation({ navigation }: RootTabScreenProps<'TabOn
       }
     }
     return (
-      <SafeAreaView>
+      <SafeAreaView style={styles.safe}>
           <TextInput
               style={styles.input}
               onChangeText={setHeight}
@@ -72,17 +73,22 @@ export default function AddInformation({ navigation }: RootTabScreenProps<'TabOn
               onChangeText={setPulse}
               placeholder="Pulse"
           />
-          <TouchableOpacity onPress={onCancel} style={styles.buttonContainer}>
-              <Text>Cancel</Text>  
-          </TouchableOpacity>              
-          <TouchableOpacity onPress={onComplete} style={styles.buttonContainer}>
-              <Text>Add information</Text> 
-          </TouchableOpacity>
+          <Pressable onPress={onCancel} style={styles.buttonContainer1}>
+            <Text style={{color:'white'}}>Cancel</Text> 
+
+          </Pressable>              
+          <Pressable onPress={onComplete} style={styles.buttonContainer2}>
+              <Text style={{color:'white'}}>Complete</Text> 
+  
+          </Pressable>
       </SafeAreaView>
     );
   }
 
 const styles = StyleSheet.create({
+  safe: {
+    marginTop:100
+  },
   input: {
     height: 40,
     margin: 12,
@@ -99,5 +105,31 @@ const styles = StyleSheet.create({
     width:250,
     borderRadius:30,
     backgroundColor: "#00BFFF",
+  },
+  buttonContainer1: {
+    display:"flex",
+    marginTop:20,
+    height:45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:150,
+    borderRadius:30,
+    left:120,
+    backgroundColor: 'black',
+    flexDirection:"row"
+  },
+  buttonContainer2: {
+    display:"flex",
+    marginTop:5,
+    height:45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom:20,
+    width:150,
+    borderRadius:30,
+    left:120,
+    backgroundColor: 'black',
+    flexDirection:"row"
   },
 });
