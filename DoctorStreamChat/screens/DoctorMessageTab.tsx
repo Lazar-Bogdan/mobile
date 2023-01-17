@@ -6,6 +6,7 @@ import {StyleSheet, Button, SafeAreaView, TouchableOpacity, Pressable, Text} fro
 import axios from "axios";
 import {   Avatar, Card, Title, Paragraph } from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Icon } from 'react-native-elements';
 
 
 export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne'>) {
@@ -74,17 +75,17 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
             <View style={{
                 flexDirection: 'row'
             }}>
-                <Avatar.Image size={60} source={{ uri: item.img }} />
+                <Avatar.Image size={60} source={{ uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/"+item.clientImg }} />
                 <View style={{ flex: 1 }}>
                     <View style={{
                         flexDirection: 'row', alignItems: 'center'
                     }}>
-                        <View style={{ marginHorizontal: 10, flex: 1 }}>
+                        <View style={{ marginHorizontal: 10, flex: 1, top:15  }}>
                             <Text style={{ fontSize: 16 }}>{item.clientusername}</Text>
                         </View>
-                        <Pressable onPress={()=>{gotToMessage(item.roomid)}} style={styles.buttonContaine1r}>
-                            <Text style={{color:'white'}}>Join</Text> 
-                        </Pressable>
+                        <View style={{ marginHorizontal: 10, flex: 1, top:20 }}>
+                          <Icon name="message" type="MaterialCommunityIcons" color="black" onPress={()=>{gotToMessage(item.roomid)}} />
+                        </View>
                     </View>
                 </View>
             </View>

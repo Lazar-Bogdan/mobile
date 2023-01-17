@@ -4,6 +4,7 @@ import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 //const socket = io("http://127.0.0.1:3000");
+import { Icon } from 'react-native-elements';
 
 export default function ChatDoctor ({navigation}) {
     const [message, setMessage] = useState(" ");
@@ -140,9 +141,8 @@ export default function ChatDoctor ({navigation}) {
 
                 }}
                 ></TextInput>
-                <TouchableOpacity onPress={()=>{submitChatMessage()}} style={styles.buttonContainer}>
-                    <Text>Send</Text> 
-                </TouchableOpacity>
+
+                <Icon name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage()}} />
             </ScrollView>
         </SafeAreaView>
       );

@@ -6,6 +6,9 @@ import { Button, IconButton, Avatar } from 'react-native-paper'
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { GiftedChat } from 'react-native-gifted-chat';
 
+import { Icon } from 'react-native-elements';
+
+
 //const socket = io("http://127.0.0.1:3000");
 
 export default function Chat ({navigation}) {
@@ -153,9 +156,9 @@ export default function Chat ({navigation}) {
 
                 }}
                 ></TextInput>
-                <TouchableOpacity onPress={()=>{submitChatMessage()}} style={styles.buttonContainer}>
-                    <Text>Send</Text> 
-                </TouchableOpacity>
+
+                <Icon name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage()}} />
+
             </ScrollView>
         
         </SafeAreaView>

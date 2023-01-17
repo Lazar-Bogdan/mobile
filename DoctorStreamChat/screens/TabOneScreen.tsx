@@ -5,6 +5,8 @@ import { RootTabScreenProps } from '../types';
 import {StyleSheet, Button, SafeAreaView, TouchableOpacity, Pressable, Text} from "react-native";
 import axios from "axios";
 import {   Avatar, Card, Title, Paragraph } from 'react-native-paper'
+import { Icon } from 'react-native-elements';
+
 
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -80,17 +82,17 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
           <View style={{
               flexDirection: 'row'
           }}>
-              <Avatar.Image size={60} source={{ uri: item.img }} />
+              <Avatar.Image style={{}} size={60} source={{ uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/"+item.doctorImg }} />
               <View style={{ flex: 1 }}>
                   <View style={{
                       flexDirection: 'row', alignItems: 'center'
                   }}>
-                      <View style={{ marginHorizontal: 10, flex: 1 }}>
+                      <View style={{ marginHorizontal: 10, flex: 1, top:20 }}>
                           <Text style={{ fontSize: 16 }}>{item.doctorusername}</Text>
                       </View>
-                      <Pressable onPress={()=>{gotToMessage(item.roomid)}} style={styles.buttonContaine1r}>
-                          <Text style={{color:'white'}}>Join</Text> 
-                      </Pressable>
+                      <View style={{ marginHorizontal: 10, flex: 1, top:20 }}>
+                        <Icon name="message" type="MaterialCommunityIcons" color="black" onPress={()=>{gotToMessage(item.roomid)}} />
+                      </View>
                   </View>
               </View>
           </View>
