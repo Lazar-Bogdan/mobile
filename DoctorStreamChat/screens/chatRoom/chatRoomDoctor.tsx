@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react'
 import io from 'socket.io-client';
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView} from "react-native";
+import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView, View} from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 //const socket = io("http://127.0.0.1:3000");
-import { Icon } from 'react-native-elements';
+import { Icon, Avatar } from 'react-native-elements';
 
 export default function ChatDoctor ({navigation}) {
     const [message, setMessage] = useState(" ");
@@ -14,6 +14,7 @@ export default function ChatDoctor ({navigation}) {
     const [socketMessage, setSocketMessage] = useState([""]);
     const [loadConversation, setConversation] = useState([]);
     const [socket, setSocket] = useState(null)
+    const [clientImg, setClientImg] = useState(" ");
 
     async function loadMessages(){
         const roomid = await AsyncStorage.getItem('roomid');
@@ -28,6 +29,19 @@ export default function ChatDoctor ({navigation}) {
         let json = await result.json();
         console.log(json[0].msg);
         setOutputMessage(json);
+    }
+
+    async function getDoctorImg()
+    {
+        const email = await AsyncStorage.getItem('email');
+        const result = await fetch("http://localhost:2000/doctor/getDoctorImg", {
+            method: 'GET',
+            headers: {
+                email:email
+            }
+        });
+        let json = await result.json();
+        setClientImg(json);
     }
 
     useEffect(() =>{
@@ -46,7 +60,7 @@ export default function ChatDoctor ({navigation}) {
     
             });
         }
-
+        getDoctorImg()
     },[socket])
 
     useEffect(()=>{
@@ -120,17 +134,59 @@ export default function ChatDoctor ({navigation}) {
           // }
           const filt = Array.from(outputMessage).map((outputMessage) =>
               <>
-              <Text>from:{outputMessage.from}</Text>
-              <Text>to:{outputMessage.to}</Text>
-              <Text>message:{outputMessage.msg}</Text> 
+                {outputMessage.from === "doctor" ? (
+                    <View style={styles.rec}>
+                        <Avatar
+                            position="absolute"
+                            bottom={-15}
+                            right={-5}
+                            rounded
+                            //For web
+                            containerStyle={{
+                                position: "absolute",
+                                bottom: -15,
+                                right: -5,
+                            }}
+                            size={30}
+                            source={{
+                                uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/" +clientImg,
+                            }}
+                            ></Avatar>
+                        <Text style={styles.recText}>{outputMessage.msg}</Text>
+                        </View>) : (
+                            <View style={styles.sender}>
+                            <Avatar
+                            position="absolute"
+                            bottom={-15}
+                            left={-5}
+                            rounded
+                            //For web
+                            containerStyle={{
+                                position: "absolute",
+                                bottom: -15,
+                                left: -5,
+                            }}
+                            size={30}
+                            source={{ // de pus adevarata poza
+                                uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/" +clientImg,
+                            }}
+                            ></Avatar>
+                            <Text style={styles.senderText}>{outputMessage.msg}</Text>
+                        
+                        </View>
+                        )
+                    }
               </>
           );
           return filt;
       }
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex:1}}>
             <ScrollView>
                 {test()}
+                
+            </ScrollView>
+            <View>
                 <TextInput 
                 style={{height: 40, borderWidth:2}}
                 value={message}
@@ -143,7 +199,7 @@ export default function ChatDoctor ({navigation}) {
                 ></TextInput>
 
                 <Icon name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage()}} />
-            </ScrollView>
+            </View>
         </SafeAreaView>
       );
 };
@@ -161,4 +217,36 @@ const styles = StyleSheet.create({
         borderRadius:30,
         backgroundColor: "#00BFFF",
       },
+      rec: {//reciever style
+        padding: 15,
+        backgroundColor: "#ECECEC",//GREY
+        alignSelf: "flex-end",
+        borderRadius: 20,
+        marginRight: 15,
+        marginBottom: 20,
+        maxWidth: "80%",
+        position: "relative",
+    },
+    recText: {
+        color:"black",
+        fontWeight: "500",
+        marginLeft: 10,
+
+    },
+    sender: {//sender style
+        padding: 15,
+        backgroundColor: "#2B68E6",//BLUE
+        alignSelf: "flex-start",
+        borderRadius: 20,
+        margin: 15,
+        maxWidth: "80%",
+        position: "relative",
+
+    },
+    senderText:{
+        color:"white",
+        fontWeight: "500",
+        marginLeft: 10,
+        marginBottom: 15,
+    }
 });
