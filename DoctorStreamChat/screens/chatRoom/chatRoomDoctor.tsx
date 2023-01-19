@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react'
+import React, { useEffect, useState, useContext, useCallback, useRef } from 'react'
 import io from 'socket.io-client';
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView, View} from "react-native";
+import { SafeAreaView, StyleSheet, FlatList, TextInput, TouchableOpacity, Text, ScrollView, View, Button} from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 //const socket = io("http://127.0.0.1:3000");
@@ -9,7 +9,7 @@ import { Icon, Avatar } from 'react-native-elements';
 export default function ChatDoctor ({navigation}) {
     const [message, setMessage] = useState(" ");
     const [chatMessage, setChatMessage] = useState(["test"]);
-    const[visible, setVisible] = React.useState(30);
+    const[visible, setVisible] = React.useState(50);
     const [outputMessage, setOutputMessage] = useState([]);
     const [socketMessage, setSocketMessage] = useState([""]);
     const [loadConversation, setConversation] = useState([]);
@@ -93,7 +93,7 @@ export default function ChatDoctor ({navigation}) {
 
         // socket.emit("join", {id:"test", username:email});
         socket.emit("message", {id: roomid, message:message});
-        
+        setMessage("");
     }
 
 
@@ -121,6 +121,15 @@ export default function ChatDoctor ({navigation}) {
         );
         return Filtered;
       }
+
+      const [offset,setOffset] = useState(0);
+        const scrollViewRef = useRef();
+
+        const slowlyScrollDown = () => {
+            const y = offset + 10000000;
+            scrollViewRef.current.scrollTo({x: 0, y, animated: true});
+            setOffset(y);
+        }
     
       function test()
       {
@@ -182,23 +191,28 @@ export default function ChatDoctor ({navigation}) {
       }
     return (
         <SafeAreaView style={{flex:1}}>
-            <ScrollView>
+            <ScrollView ref={scrollViewRef} >                
+                <Button onPress={slowlyScrollDown} title="Slowly scroll a bit down..." />
                 {test()}
                 
             </ScrollView>
+
             <View>
+                <View>
                 <TextInput 
-                style={{height: 40, borderWidth:2}}
-                value={message}
-                autoCorrect={false}
-                clearButtonMode="always"  
-                onChangeText={chatMessage => {
-                    setMessage(chatMessage);
-
-                }}
+                    style={styles.textInput}
+                    value={message}
+                    autoCorrect={false}
+                    clearButtonMode="always"  
+                    onChangeText={chatMessage => {
+                        setMessage(chatMessage);
+                    }}
                 ></TextInput>
+                </View>
+                <View style={{top:-40}}>
+                    <Icon style={{left:170, fontSize:100 }} name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage(); slowlyScrollDown()}} />
 
-                <Icon name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage()}} />
+                </View>    
             </View>
         </SafeAreaView>
       );
@@ -206,6 +220,17 @@ export default function ChatDoctor ({navigation}) {
 
     
 const styles = StyleSheet.create({
+    textInput:{
+        width:350,
+        height: 50,
+        marginRight: 15,
+        backgroundColor: "#ECECEC",
+        padding: 10,
+        color: 'grey',
+        borderRadius: 30,
+        borderWidth:2 
+
+    },
     buttonContainer: {
         marginTop:10,
         height:45,

@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react'
+import React, { useEffect, useState, useContext, useCallback, useRef } from 'react'
 import io from 'socket.io-client';
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, ScrollView, View } from "react-native";
-import { Button, IconButton } from 'react-native-paper'
+import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, Button, ScrollView, View } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -39,7 +38,7 @@ export default function Chat ({navigation}) {
         let json = await result.json();
         setOutputMessage(json);
     }
-
+    const [doctor,setdoctor] = useState("");
     async function getClientImg()
     {
         const x = await AsyncStorage.getItem('username');
@@ -53,6 +52,8 @@ export default function Chat ({navigation}) {
         });
         let json = await result.json();
         setClientImg(json);
+        let y = await AsyncStorage.getItem('doctorusername');
+        setdoctor(y);
     }
 
     useEffect(() =>{
@@ -69,7 +70,8 @@ export default function Chat ({navigation}) {
             });
         }
         getClientImg();
-    },[socket])
+        
+    },[socket, doctor])
 
     useEffect(()=>{
         loadMessages();
@@ -143,6 +145,8 @@ export default function Chat ({navigation}) {
         console.log(clientImg);
         console.log("CLIENT USERNAME");
         console.log(clientUsername);
+        console.log("DOCTOR USERNAME");
+        console.log(doctor);
         // for(var i=0; i<outputMessage.length; i++)
         // {
             
@@ -196,29 +200,40 @@ export default function Chat ({navigation}) {
         );
         return filt;
     }
+    const scrollViewRef = useRef();
+    const [offset,setOffset] = useState(0);
+
+    const slowlyScrollDown = () => {
+        const y = offset + 10000000;
+        scrollViewRef.current.scrollTo({x: 0, y, animated: true});
+        setOffset(y);
+    }
+    
 
     return (
         
-        <SafeAreaView style={{flex:1}}>
-            <ScrollView >
-                {
-                    test()
-                }
+        <SafeAreaView style={{flex:1}} onAccessibilityAction={() => navigation.setOptions({title:"Dr." + doctor})} onLayout={() => navigation.setOptions({title:"Dr." + doctor})}>
+            <ScrollView ref={scrollViewRef} >                
+                <Button onPress={slowlyScrollDown} title="Slowly scroll a bit down..." />
+                {test()}
                 
             </ScrollView>
             <View>
+                <View>
                 <TextInput 
-                    style={{height: 35, borderWidth:2, alignItems:'center'}}
+                    style={styles.textInput}
                     value={message}
                     autoCorrect={false}
                     clearButtonMode="always"  
                     onChangeText={chatMessage => {
                         setMessage(chatMessage);
-
                     }}
-                    ></TextInput>
+                ></TextInput>
+                </View>
+                <View style={{top:-40}}>
+                    <Icon style={{left:170, fontSize:100 }} name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage(); slowlyScrollDown()}} />
 
-                <Icon name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage()}} />
+                </View>    
             </View>
         </SafeAreaView>
             
@@ -227,6 +242,17 @@ export default function Chat ({navigation}) {
 
     
 const styles = StyleSheet.create({
+    textInput:{
+        width:350,
+        height: 50,
+        marginRight: 15,
+        backgroundColor: "#ECECEC",
+        padding: 10,
+        color: 'grey',
+        borderRadius: 30,
+        borderWidth:2 
+
+    },
     buttonContainer: {
         marginTop:10,
         height:45,

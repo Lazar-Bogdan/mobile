@@ -34,8 +34,9 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
     //let json = await response.text()
     let json = await response.json();
     console.log("response from database");
-    console.log(json[0].clientusername);
+    console.log(json[0].doctorusername);
     await AsyncStorage.setItem('username',json[0].clientusername);
+    await AsyncStorage.setItem('doctorusername', json[0].doctorusername);
     setDoctorsDetails(json);
     // if(response){
     //   // console.log(json.length);
