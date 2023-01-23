@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Linking, Pressable } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import Colors from '../constants/Colors';
@@ -30,6 +30,8 @@ import DoctorLogin from '../screens/DoctorLogin';
 import Bottom from '../screens/DoctorIndex';
 import Chat from '../screens/chatRoom/chatroom';
 import ChatDoctor from '../screens/chatRoom/chatRoomDoctor';
+
+import { Icon, Avatar} from 'react-native-elements';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -110,10 +112,10 @@ function BottomTabNavigator() {
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
           title: 'Chat',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="comments" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => Linking.openURL('mailto:bogdilazar5@gmail.com?subject=QUESTION&body=') }
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
@@ -132,7 +134,7 @@ function BottomTabNavigator() {
         component={TabTwoScreen}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </BottomTab.Navigator>

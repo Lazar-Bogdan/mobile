@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   StyleSheet,
@@ -10,20 +10,42 @@ import {
   Pressable
 } from 'react-native';
 
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 const TwoPage = ({navigation}) => {
+
+  const [img, setClientImg] = React.useState("");
   
+  async function getImg()
+  {
+    const email = await AsyncStorage.getItem('email');
+    const result = await fetch("http://localhost:2000/users/getClientImg", {
+        method: 'GET',
+        headers: {
+            email:email
+        }
+    });
+    let json = await result.json();
+    setClientImg(json);
+  }
+
+  useEffect(() => {
+    getImg();
+  })
+
   function onPress(){
     navigation.navigate('EditProfile');
   }
   function onPressAddInfo(){
     navigation.navigate('Info');
   }
+  console.log("IMG IMG IMG IMG");
+  console.log(img);
   return (
     <View style={styles.container}>
         <View style={styles.header}></View>
-        <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+        <Image style={styles.avatar} source={{uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/"+ img}}/>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <Text style={styles.title}>Chat</Text>

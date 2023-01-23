@@ -10,9 +10,28 @@ import {
   Pressable
 } from 'react-native';
 
-
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const DoctorProfileTab = ({navigation}) => {
+
+  const [img, setClientImg] = React.useState("");
+  
+  async function getImg()
+  {
+    const email = await AsyncStorage.getItem('email');
+    const result = await fetch("http://localhost:2000/doctor/getDoctorImg", {
+        method: 'GET',
+        headers: {
+            email:email
+        }
+    });
+    let json = await result.json();
+    setClientImg(json);
+  }
+
+  React.useEffect(() => {
+    getImg();
+  })
   
   function onPress(){
     navigation.navigate('DoctorEdit');
@@ -20,7 +39,7 @@ const DoctorProfileTab = ({navigation}) => {
   return (
     <View style={styles.container}>
         <View style={styles.header}></View>
-        <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
+        <Image style={styles.avatar} source={{uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/"+ img}}/>
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <Text style={styles.title}>Chat</Text>
@@ -36,11 +55,12 @@ const DoctorProfileTab = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container:{
-
+    filter: 'blur(8px)'
   },
   header:{
     backgroundColor: "#00BFFF",
     height:200,
+    filter: 'blur(8px)',
   },
   avatar: {
     width: 130,

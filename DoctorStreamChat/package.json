@@ -70,6 +70,8 @@
 
     "react-native": "0.69.6",
 
+    "react-native-blur": "^3.2.2",
+
     "react-native-elements": "^3.4.3",
 
     "react-native-gifted-chat": "^1.1.0",

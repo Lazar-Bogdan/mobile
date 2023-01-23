@@ -25,10 +25,9 @@ const FirstPage = ({navigation}) => {
                     <Pressable onPress={()=>{user()}} style={styles.buttonContainer1}>
                         <Text style={{color:'white'}}>User</Text> 
                     </Pressable>
-                    <Text> </Text>
-                    <Pressable onPress={()=>{doctor()}} style={styles.buttonContainer1}>
+                    <TouchableOpacity onPress={()=>{doctor()}} style={styles.buttonContainer1}>
                         <Text style={{color:'white'}}>Doctor</Text> 
-                    </Pressable>
+                    </TouchableOpacity>
                 </View>
             </View>
 

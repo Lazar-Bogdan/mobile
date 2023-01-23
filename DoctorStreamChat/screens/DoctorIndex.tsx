@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable, Linking } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import useColorScheme from '../hooks/useColorScheme';
 import Colors from '../constants/Colors';
@@ -47,10 +47,10 @@ export default function Bottom({navigation}) {
         name="Messages"
         component={DoctorMessage}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="comments" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate('Modal')}
+              onPress={() => Linking.openURL('mailto:support@example.com?subject=SendMail&body=Description') }
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>
@@ -69,7 +69,7 @@ export default function Bottom({navigation}) {
         component={DoctorProfileTab}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </BottomTab.Navigator>
