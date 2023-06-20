@@ -15,7 +15,7 @@ const Login = ({navigation}) => {
       try {
           const response = await fetch(
             //https://backend-server-doctor.herokuapp.com/auth/login
-              'http://localhost:2000/auth/login',{
+              'http://192.168.100.27:3000/auth/login',{
                   method: 'POST',
                   headers: {
                       email: email,
@@ -31,6 +31,7 @@ const Login = ({navigation}) => {
           navigation.navigate('Root');
         }
       } catch (error) {
+        console.log(error);
         alert("Some error occoured, please try again.");
       }
     };

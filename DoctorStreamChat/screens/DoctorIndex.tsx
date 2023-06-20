@@ -21,7 +21,7 @@ export default function Bottom({navigation}) {
     try{
       const email = await AsyncStorage.getItem('email');
       const response = await fetch(
-        'http://localhost:2000/users/getUserUnderEmail',{headers:{email:email}}
+        'http://192.168.100.27:3000/users/getUserUnderEmail',{headers:{email:email}}
       );
       let json = await response.json();
       if(response){

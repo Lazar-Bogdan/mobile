@@ -19,7 +19,7 @@ export default function DoctorMessage({ navigation }: RootTabScreenProps<'TabOne
   async function getSubFromDatabase(){
     const email = await AsyncStorage.getItem('email')
     const response = await fetch(
-        'http://localhost:2000/messages/doctorMessage',{headers: { doctor: email,}}
+        'http://192.168.100.27:3000/messages/doctorMessage',{headers: { doctor: email,}}
     );
     //let json = await response.text()
     let json = await response.json();

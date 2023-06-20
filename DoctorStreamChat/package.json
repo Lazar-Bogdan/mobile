@@ -6,6 +6,8 @@
 
   "main": "node_modules/expo/AppEntry.js",
 
+  "proxy": "http://localhost:2000/",
+
   "scripts": {
 
     "start": "expo start",
@@ -75,6 +77,8 @@
     "react-native-elements": "^3.4.3",
 
     "react-native-gifted-chat": "^1.1.0",
+
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
 
     "react-native-paper": "^5.1.1",
 

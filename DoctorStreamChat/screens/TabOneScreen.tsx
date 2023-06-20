@@ -29,7 +29,7 @@ export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'
   async function getSubFromDatabase(){
     const email = await AsyncStorage.getItem('email')
     const response = await fetch(
-        'http://localhost:2000/messages/clientMessage',{headers: { client: email,}}
+        'http://192.168.100.27:3000/messages/clientMessage',{headers: { client: email,}}
     );
     //let json = await response.text()
     let json = await response.json();

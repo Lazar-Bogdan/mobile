@@ -19,7 +19,7 @@ const DoctorProfileTab = ({navigation}) => {
   async function getImg()
   {
     const email = await AsyncStorage.getItem('email');
-    const result = await fetch("http://localhost:2000/doctor/getDoctorImg", {
+    const result = await fetch("http://192.168.100.27:3000/doctor/getDoctorImg", {
         method: 'GET',
         headers: {
             email:email

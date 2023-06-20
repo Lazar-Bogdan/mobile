@@ -31,7 +31,7 @@ export default function AddInformation({ navigation }: RootTabScreenProps<'TabOn
       }else{
         const id = await AsyncStorage.getItem('id')
         const response = await fetch(
-            'http://localhost:2000/users/addInfoFromMobile',{
+            'http://192.168.100.27:3000/users/addInfoFromMobile',{
                 method: 'PUT',
                 headers: {
                 Accept: 'application/json',

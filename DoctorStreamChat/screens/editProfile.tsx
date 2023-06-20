@@ -21,7 +21,7 @@ export default function EditProfile ({navigation}) {
     }else{
       const id = await AsyncStorage.getItem('id')
       const response = await fetch(
-          'http://localhost:2000/users/EditUserFromMobile',{
+          'http://192.168.100.27:3000/users/EditUserFromMobile',{
               method: 'PUT',
               headers: {
               Accept: 'application/json',

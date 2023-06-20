@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, useCallback, useRef } from 'react'
 import io from 'socket.io-client';
-import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text, Button, ScrollView, View } from "react-native";
+import { KeyboardAvoidingView, SafeAreaView, StyleSheet, Pressable, TextInput, Platform, TouchableOpacity, Text, Button, ScrollView, View } from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -21,14 +22,15 @@ export default function Chat ({navigation}) {
     const [socketMessage, setSocketMessage] = useState([""]);
     const [loadConversation, setConversation] = useState([]);
     const [socket, setSocket] = useState(null)
-    const [clientImg, setClientImg] = useState(" ");
     const [clientUsername, setClientUsername] = useState(" ");
+    const [clientImg, setClientImg] = useState(" ");
+    const [ doctorImg, setDoctorImg] = useState(" ");
     async function loadMessages(){
 
         const roomid = await AsyncStorage.getItem('roomid');
         console.log("roomid:");
         console.log(roomid);
-        const result = await fetch("http://localhost:2000/messages/getRoomMessage", {
+        const result = await fetch("http://192.168.100.27:3000/messages/getRoomMessage", {
             method: 'GET',
             headers: {
                 roomid:roomid
@@ -36,7 +38,9 @@ export default function Chat ({navigation}) {
         })
         //console.log("loadingMessageClient");
         let json = await result.json();
-        setOutputMessage(json);
+        setOutputMessage(json.Messagges);
+        setClientImg(json.clientImg);
+        setDoctorImg(json.doctorImg);
     }
     const [doctor,setdoctor] = useState("");
     async function getClientImg()
@@ -44,7 +48,7 @@ export default function Chat ({navigation}) {
         const x = await AsyncStorage.getItem('username');
         setClientUsername(x);
         const email = await AsyncStorage.getItem('email');
-        const result = await fetch("http://localhost:2000/users/getClientImg", {
+        const result = await fetch("http://192.168.100.27:3000/users/getClientImg", {
             method: 'GET',
             headers: {
                 email:email
@@ -59,7 +63,7 @@ export default function Chat ({navigation}) {
     useEffect(() =>{
         if(socket === null)
         {
-            setSocket(io("http://127.0.0.1:3000"));
+            setSocket(io("http://192.168.100.27:3000"));
         }
         if(socket)
         {
@@ -67,6 +71,7 @@ export default function Chat ({navigation}) {
                 setOutputMessage(msg);
                 console.log(msg);
                 setSocketMessage(socketMessage => [...socketMessage, msg]);
+                loadMessages();
             });
         }
         getClientImg();
@@ -78,17 +83,12 @@ export default function Chat ({navigation}) {
     },[socketMessage])
 
     async function submitChatMessage(){
-        // socket.emit("chat message", message);
-        // setMessage(" ");
-        // socket.on("chat message", msg =>{
-        //     setMessage(chatMessage=> [...chatMessage, msg]);
-        //     console.log(msg);
-        // });
+
         const roomid = await AsyncStorage.getItem('roomid');
 
 
         //!! DE SCOS CAND VREM SA TRIMITEM CATRE BAZA
-        const result = await fetch("http://localhost:2000/messages/addMessageConversation", {
+        const result = await fetch("http://192.168.100.27:3000/messages/addMessageConversation", {
             method: 'POST',
             headers: {
                 from:"client",
@@ -136,25 +136,12 @@ export default function Chat ({navigation}) {
         return Filtered;
       }
     
-    function test()
+    function showMessages()
     {
-        console.log("outputmessage lengt");
-        console.log(outputMessage.length);
-        console.log(outputMessage);
-        console.log("MESSAGE IMAGE:");
-        console.log(clientImg);
-        console.log("CLIENT USERNAME");
-        console.log(clientUsername);
-        console.log("DOCTOR USERNAME");
-        console.log(doctor);
-        // for(var i=0; i<outputMessage.length; i++)
-        // {
-            
-        //     filt = filt + "<Text>from:" + outputMessage[i].from + "</Text> <Text>To:" + outputMessage[i].to + "</Text>" + "<Text>Message:"+outputMessage[i].msg + "</Text"
-        // }
         const filt = Array.from(outputMessage).map((outputMessage) =>
             <>
                 {outputMessage.from === "client" ? (
+                    // incearca cu keyboardavoidingview
                     <View style={styles.rec}>
                         <Avatar
                             position="absolute"
@@ -188,7 +175,7 @@ export default function Chat ({navigation}) {
                         }}
                         size={30}
                         source={{ // de pus adevarata poza
-                            uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/" +clientImg,
+                            uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/" +doctorImg,
                         }}
                         ></Avatar>
                         <Text style={styles.senderText}>{outputMessage.msg}</Text>
@@ -211,41 +198,52 @@ export default function Chat ({navigation}) {
     
 
     return (
-        
-        <SafeAreaView style={{flex:1}} onAccessibilityAction={() => navigation.setOptions({title:"Dr." + doctor})} onLayout={() => navigation.setOptions({title:"Dr." + doctor})}>
-            <ScrollView ref={scrollViewRef} >                
-                <Button onPress={slowlyScrollDown} title="Slowly scroll a bit down..." />
-                {test()}
-                
-            </ScrollView>
-            <View>
-                <View>
-                <TextInput 
-                    style={styles.textInput}
-                    value={message}
-                    autoCorrect={false}
-                    clearButtonMode="always"  
-                    onChangeText={chatMessage => {
-                        setMessage(chatMessage);
-                    }}
-                ></TextInput>
-                </View>
-                <View style={{top:-40}}>
-                    <Icon style={{left:170, fontSize:100 }} name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage(); slowlyScrollDown()}} />
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            scrollEnabled={true}
+            keyboardShouldPersistTaps="handled"
+            enableOnAndroid={true}
+            enableAutomaticScroll={Platform.OS === 'ios'}
+            extraScrollHeight={Platform.OS === 'ios' ? 0 : -100}
+        >
+            <SafeAreaView style={{flex:1}} onAccessibilityAction={() => navigation.setOptions({title:"Dr." + doctor})} onLayout={() => navigation.setOptions({title:"Dr." + doctor})}>
+                <ScrollView ref={scrollViewRef} >                
+                    <Button onPress={slowlyScrollDown} title="Slowly scroll a bit down..." />
+                    {showMessages()}
+                    
+                </ScrollView>
+                <View style={{height:40}}>
+                    <View>
+                        <TextInput 
+                            style={styles.textInput}
+                            value={message}
+                            autoCorrect={false}
+                            clearButtonMode="always"  
+                            onChangeText={chatMessage => {
+                                setMessage(chatMessage);
+                            }}
+                        ></TextInput>
+                    
+                    </View>
+                    <View>
 
-                </View>    
-            </View>
-        </SafeAreaView>
-            
+                    
+                        <Pressable onPress={()=>{submitChatMessage(); slowlyScrollDown()}} style={styles.buttonContainer}>
+                            <Text style={{ fontSize: 40, fontWeight: 'bold' }}>{'\u2192'}</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </SafeAreaView>
+        </KeyboardAwareScrollView>
       );
 };
 
     
 const styles = StyleSheet.create({
     textInput:{
-        width:350,
+        width:300,
         height: 50,
-        marginRight: 15,
         backgroundColor: "#ECECEC",
         padding: 10,
         color: 'grey',
@@ -253,16 +251,22 @@ const styles = StyleSheet.create({
         borderWidth:2 
 
     },
+    container: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        padding: 10,
+      },
     buttonContainer: {
-        marginTop:10,
+        display:"flex",
         height:45,
-        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom:20,
-        width:250,
+        width:80,
+        left:300,
+        top:-50,
         borderRadius:30,
-        backgroundColor: "#00BFFF",
+        flexDirection:"row"
       },
       rec: {//reciever style
         padding: 15,

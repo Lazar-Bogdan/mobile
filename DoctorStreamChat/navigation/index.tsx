@@ -85,7 +85,7 @@ function BottomTabNavigator() {
     try{
       const email = await AsyncStorage.getItem('email');
       const response = await fetch(
-        'http://localhost:2000/users/getUserUnderEmail',{headers:{email:email}}
+        'http://192.168.100.27:3000/users/getUserUnderEmail',{headers:{email:email}}
       );
       let json = await response.json();
       if(response){
@@ -115,7 +115,7 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="comments" color={color} />,
           headerRight: () => (
             <Pressable
-              onPress={() => Linking.openURL('mailto:bogdilazar5@gmail.com?subject=QUESTION&body=') }
+              onPress={() => Linking.openURL('mailto:doctorforyouservice@gmail.com?subject=QUESTION&body=') }
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}>

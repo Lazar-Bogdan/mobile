@@ -20,7 +20,7 @@ const TwoPage = ({navigation}) => {
   async function getImg()
   {
     const email = await AsyncStorage.getItem('email');
-    const result = await fetch("http://localhost:2000/users/getClientImg", {
+    const result = await fetch("http://192.168.100.27:3000/users/getClientImg", {
         method: 'GET',
         headers: {
             email:email

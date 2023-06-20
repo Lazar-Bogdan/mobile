@@ -16,7 +16,7 @@ const DoctorLogin = ({navigation}) => {
       console.log(password);
       try {
           const response = await fetch(
-              'http://localhost:2000/auth/doctorLogin',{
+              'http://192.168.100.27:3000/auth/doctorLogin',{
                   method: 'POST',
                   headers: {
                     email: email,

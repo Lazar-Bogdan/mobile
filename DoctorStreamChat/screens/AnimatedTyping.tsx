@@ -93,7 +93,6 @@ let styles = StyleSheet.create({
     text: {
         marginTop:200,
         fontStyle:"italic",
-        fontFamily:"Courier",
         position:"relative",
         color: "#000000",
         fontSize: 20,

@@ -1,116 +1,132 @@
 import React, { useEffect, useState, useContext, useCallback, useRef } from 'react'
 import io from 'socket.io-client';
-import { SafeAreaView, StyleSheet, FlatList, TextInput, TouchableOpacity, Text, ScrollView, View, Button} from "react-native";
+import { KeyboardAvoidingView, SafeAreaView, StyleSheet, Pressable, TextInput, Platform, TouchableOpacity, Text, Button, ScrollView, View } from "react-native";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
-//const socket = io("http://127.0.0.1:3000");
-import { Icon, Avatar } from 'react-native-elements';
 
-export default function ChatDoctor ({navigation}) {
+import { Icon, Avatar} from 'react-native-elements';
+
+
+//const socket = io("http://127.0.0.1:3000");
+
+export default function Chat ({navigation}) {
     const [message, setMessage] = useState(" ");
     const [chatMessage, setChatMessage] = useState(["test"]);
     const[visible, setVisible] = React.useState(50);
-    const [outputMessage, setOutputMessage] = useState([]);
+    const [outputMessage, setOutputMessage] = useState([{
+        from: " ",
+        to: " ",
+        msg: " ",
+    }]);
     const [socketMessage, setSocketMessage] = useState([""]);
     const [loadConversation, setConversation] = useState([]);
     const [socket, setSocket] = useState(null)
+    const [clientUsername, setClientUsername] = useState(" ");
     const [clientImg, setClientImg] = useState(" ");
-
+    const [ doctorImg, setDoctorImg] = useState(" ");
     async function loadMessages(){
-        const roomid = await AsyncStorage.getItem('roomid');
 
-        const result = await fetch("http://localhost:2000/messages/getMessageDoctor", {
+        const roomid = await AsyncStorage.getItem('roomid');
+        console.log("roomid:");
+        console.log(roomid);
+        const result = await fetch("http://192.168.100.27:3000/messages/getRoomMessage", {
             method: 'GET',
             headers: {
                 roomid:roomid
             }
         })
-        console.log("loadingMessageClient");
+        //console.log("loadingMessageClient");
         let json = await result.json();
-        console.log(json[0].msg);
-        setOutputMessage(json);
+        console.log("TEST");
+        console.log(json.clientImg);
+        setOutputMessage(json.Messagges);
+        setClientImg(json.clientImg);
+        setDoctorImg(json.doctorImg);
     }
-
-    async function getDoctorImg()
+    const [client,setclient] = useState("");
+    async function getClientImg()
     {
+        const x = await AsyncStorage.getItem('username');
+        setClientUsername(x);
         const email = await AsyncStorage.getItem('email');
-        const result = await fetch("http://localhost:2000/doctor/getDoctorImg", {
+        const result = await fetch("http://192.168.100.27:3000/doctor/getDoctorImg", {
             method: 'GET',
             headers: {
                 email:email
             }
         });
         let json = await result.json();
-        setClientImg(json);
+        setDoctorImg(json);
+        let y = await AsyncStorage.getItem('doctorusername');
+        setclient(y);
     }
 
     useEffect(() =>{
         if(socket === null)
         {
-            setSocket(io("http://127.0.0.1:3000"));
+            setSocket(io("http://192.168.100.27:3000"));
         }
         if(socket)
         {
             socket.on("message", msg => {
-                // setMessage(chatMessage=> [...chatMessage, msg]);
                 setOutputMessage(msg);
-                setMessage(" ");
                 console.log(msg);
                 setSocketMessage(socketMessage => [...socketMessage, msg]);
-    
+                loadMessages();
             });
         }
-        getDoctorImg()
-    },[socket])
+        getClientImg();
+        
+    },[socket, client])
 
     useEffect(()=>{
         loadMessages();
-        //console.log("use effect called");
     },[socketMessage])
 
     async function submitChatMessage(){
-        // socket.emit("chat message", message);
-        // setMessage(" ");
-        // socket.on("chat message", msg =>{
-        //     setMessage(chatMessage=> [...chatMessage, msg]);
-        //     console.log(msg);
-        // });
+
         const roomid = await AsyncStorage.getItem('roomid');
 
+
         //!! DE SCOS CAND VREM SA TRIMITEM CATRE BAZA
-        const result = await fetch("http://localhost:2000/messages/addMessageConversation", {
-                method: 'POST',
-                headers: {
-                    from:"doctor",
-                    to:"client",
-                    roomid:roomid,
-                    msg:message
-                }
-            })
+        const result = await fetch("http://192.168.100.27:3000/messages/addMessageConversation", {
+            method: 'POST',
+            headers: {
+                from:"doctor",
+                to:"client",
+                roomid:roomid,
+                msg:message
+            }
+        })
+        
         setSocketMessage(socketMessage => [...socketMessage, message]);
 
-        const email = await AsyncStorage.getItem('email');
+        // loadMessages();
+
 
         // socket.emit("join", {id:"test", username:email});
         socket.emit("message", {id: roomid, message:message});
-        setMessage("");
+        
     }
 
 
     function mapChannels(List){
         if(!List){List=[];}
+        console.log("size of list of already messages");
         console.log(List.length);
         const Filtered = List.slice(0, visible).map((item) =>
             <>
-                <Text>from:{item.from}</Text>
+                {/* <Text>from:{item.from}</Text>
                 <Text>to:{item.to}</Text>
-                <Text>message:{item.msg}</Text>
+                <Text>message:{item.msg}</Text> */}
+                <Text>Test</Text>
             </> 
         );
         return Filtered;
       }
-    
-      function mapChannelsSocket(List){
+
+    function mapChannelsSocket(List){
         console.log("socketMap");
         if(!List){List=[];}
         console.log(List.length);
@@ -121,27 +137,10 @@ export default function ChatDoctor ({navigation}) {
         );
         return Filtered;
       }
-
-      const [offset,setOffset] = useState(0);
-        const scrollViewRef = useRef();
-
-        const slowlyScrollDown = () => {
-            const y = offset + 10000000;
-            scrollViewRef.current.scrollTo({x: 0, y, animated: true});
-            setOffset(y);
-        }
     
-      function test()
-      {
-          console.log("outputmessage lengt");
-          console.log(outputMessage.length);
-          console.log(outputMessage);
-          // for(var i=0; i<outputMessage.length; i++)
-          // {
-              
-          //     filt = filt + "<Text>from:" + outputMessage[i].from + "</Text> <Text>To:" + outputMessage[i].to + "</Text>" + "<Text>Message:"+outputMessage[i].msg + "</Text"
-          // }
-          const filt = Array.from(outputMessage).map((outputMessage) =>
+    function showMessages()
+    {
+        const filt = Array.from(outputMessage).map((outputMessage) =>
               <>
                 {outputMessage.from === "doctor" ? (
                     <View style={styles.rec}>
@@ -158,7 +157,7 @@ export default function ChatDoctor ({navigation}) {
                             }}
                             size={30}
                             source={{
-                                uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/" +clientImg,
+                                uri: "https://mydoctorbucket.s3.eu-central-1.amazonaws.com/profilePhotos/" +doctorImg,
                             }}
                             ></Avatar>
                         <Text style={styles.recText}>{outputMessage.msg}</Text>
@@ -188,42 +187,64 @@ export default function ChatDoctor ({navigation}) {
               </>
           );
           return filt;
-      }
+    }
+    const scrollViewRef = useRef();
+    const [offset,setOffset] = useState(0);
+
+    const slowlyScrollDown = () => {
+        const y = offset + 10000000;
+        scrollViewRef.current.scrollTo({x: 0, y, animated: true});
+        setOffset(y);
+    }
+    
+
     return (
-        <SafeAreaView style={{flex:1}}>
-            <ScrollView ref={scrollViewRef} >                
-                <Button onPress={slowlyScrollDown} title="Slowly scroll a bit down..." />
-                {test()}
-                
-            </ScrollView>
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.container}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            scrollEnabled={true}
+            keyboardShouldPersistTaps="handled"
+            enableOnAndroid={true}
+            enableAutomaticScroll={Platform.OS === 'ios'}
+            extraScrollHeight={Platform.OS === 'ios' ? 0 : -100}
+        >
+            <SafeAreaView style={{flex:1}} onAccessibilityAction={() => navigation.setOptions({title:" " + client})} onLayout={() => navigation.setOptions({title:" " + client})}>
+                <ScrollView ref={scrollViewRef} >                
+                    <Button onPress={slowlyScrollDown} title="Slowly scroll a bit down..." />
+                    {showMessages()}
+                    
+                </ScrollView>
+                <View style={{height:40}}>
+                    <View>
+                        <TextInput 
+                            style={styles.textInput}
+                            value={message}
+                            autoCorrect={false}
+                            clearButtonMode="always"  
+                            onChangeText={chatMessage => {
+                                setMessage(chatMessage);
+                            }}
+                        ></TextInput>
+                    
+                    </View>
+                    <View>
 
-            <View>
-                <View>
-                <TextInput 
-                    style={styles.textInput}
-                    value={message}
-                    autoCorrect={false}
-                    clearButtonMode="always"  
-                    onChangeText={chatMessage => {
-                        setMessage(chatMessage);
-                    }}
-                ></TextInput>
+                    
+                        <Pressable onPress={()=>{submitChatMessage(); slowlyScrollDown()}} style={styles.buttonContainer}>
+                            <Text style={{ fontSize: 40, fontWeight: 'bold' }}>{'\u2192'}</Text>
+                        </Pressable>
+                    </View>
                 </View>
-                <View style={{top:-40}}>
-                    <Icon style={{left:170, fontSize:100 }} name="send" type="FontAwesome" color="black" onPress={()=>{submitChatMessage(); slowlyScrollDown()}} />
-
-                </View>    
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </KeyboardAwareScrollView>
       );
 };
 
     
 const styles = StyleSheet.create({
     textInput:{
-        width:350,
+        width:300,
         height: 50,
-        marginRight: 15,
         backgroundColor: "#ECECEC",
         padding: 10,
         color: 'grey',
@@ -231,16 +252,22 @@ const styles = StyleSheet.create({
         borderWidth:2 
 
     },
+    container: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        padding: 10,
+      },
     buttonContainer: {
-        marginTop:10,
+        display:"flex",
         height:45,
-        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom:20,
-        width:250,
+        width:80,
+        left:300,
+        top:-50,
         borderRadius:30,
-        backgroundColor: "#00BFFF",
+        flexDirection:"row"
       },
       rec: {//reciever style
         padding: 15,

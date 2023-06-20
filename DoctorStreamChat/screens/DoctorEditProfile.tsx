@@ -21,7 +21,7 @@ export default function DoctorEditProfile ({navigation}) {
     }else{
       const id = await AsyncStorage.getItem('id')
       const response = await fetch(
-          'http://localhost:2000/doctor/editDoctorPhone',{
+          'http://192.168.100.27:3000doctor/editDoctorPhone',{
               method: 'PUT',
               headers: {
               Accept: 'application/json',
